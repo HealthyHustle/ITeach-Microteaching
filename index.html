@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DETEKTIF KEBAIKAN – Petualangan Belajar Moral Bersama Dodo (PGPAUD)</title>
+  <meta name="description" content="Website game edukasi interaktif berbasis gamifikasi untuk anak usia dini (PGPAUD 5-6 tahun). Belajar meminta tolong dengan sopan dan mengucapkan terima kasih bersama Maskot Dodo.">
+  <meta name="theme-color" content="#FF2A85">
+
+  <link rel="icon" type="image/png" href="assets/images/dodo_welcome.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- AREA A: HEADER NAVIGASI -->
+  <header class="game-header">
+    <div class="header-inner">
+      <div class="brand-badge" role="banner">
+        <div class="brand-icon-3d" aria-hidden="true">
+          <img src="assets/images/dodo_welcome.png" alt="Logo Dodo">
+        </div>
+        <div class="brand-text-col">
+          <div class="brand-title">DETEKTIF KEBAIKAN</div>
+          <div class="brand-subtitle">PETUALANGAN MORAL PAUD</div>
+        </div>
+      </div>
+
+      <div class="header-controls-group">
+        <!-- Timer 180 Detik -->
+        <div class="circular-timer-box" title="Sisa Waktu Bermain (3 Menit)">
+          <div class="timer-svg-wrap" aria-hidden="true">
+            <svg class="circular-timer-svg" viewBox="0 0 54 54">
+              <circle cx="27" cy="27" r="23" stroke="#FCE7F3" stroke-width="5" fill="none" />
+              <circle id="timer-circle-progress" class="timer-circle-progress" cx="27" cy="27" r="23" stroke="#FF2A85" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="144.51" stroke-dashoffset="0" transform="rotate(-90 27 27)" />
+            </svg>
+            <img src="assets/images/sun_3d.png" class="timer-center-img" alt="">
+          </div>
+          <div class="timer-info-col">
+            <span class="timer-mini-label">WAKTU</span>
+            <span class="timer-clock-digits" id="timer-text">03:00</span>
+          </div>
+        </div>
+
+        <!-- Indikator Bintang -->
+        <div class="star-counter-badge-3d" title="Bintang Kebaikan Terkumpul">
+          <img src="assets/images/star_3d.png" class="header-star-img" alt="">
+          <div class="star-count-info">
+            <span class="star-count-num" id="star-count">0</span>
+            <span class="star-count-max">/3</span>
+          </div>
+        </div>
+
+        <!-- Musik, Suara, Panduan Guru -->
+        <div class="header-actions">
+          <button type="button" id="btn-toggle-music" class="btn-3d-header" title="Nyalakan/Matikan Musik">
+            🎵 <span>Musik: ON</span>
+          </button>
+          <button type="button" id="btn-toggle-voice" class="btn-3d-header" title="Nyalakan/Matikan Suara Dodo">
+            🗣️ <span>Suara: ON</span>
+          </button>
+          <button type="button" id="btn-teacher-guide" class="btn-3d-header btn-guide-pink" title="Panduan Guru & Orang Tua">
+            📘 <span>Panduan Guru</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <nav class="progress-stepper-bar" aria-label="Tahapan Permainan">
+      <div class="stepper-inner">
+        <div class="stepper-item active" data-step="1">
+          <span class="step-num-3d">1</span>
+          <span class="step-label">Opening</span>
+        </div>
+        <div class="stepper-line" aria-hidden="true"></div>
+        <div class="stepper-item" data-step="2">
+          <span class="step-num-3d">2</span>
+          <span class="step-label">Taman Bermain</span>
+        </div>
+        <div class="stepper-line" aria-hidden="true"></div>
+        <div class="stepper-item" data-step="3">
+          <span class="step-num-3d">3</span>
+          <span class="step-label">Tantangan Moral</span>
+        </div>
+        <div class="stepper-line" aria-hidden="true"></div>
+        <div class="stepper-item" data-step="4">
+          <span class="step-num-3d">4</span>
+          <span class="step-label">Closing &amp; Lencana</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="main-wrapper" id="app">
+    <section id="stage-content" class="stage-content-host" aria-live="polite"></section>
+  </main>
+
+  <!-- MODAL PANDUAN GURU -->
+  <div id="teacher-guide-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-guide-title">
+    <div class="modal-card-3d">
+      <div class="modal-header-3d">
+        <div class="modal-header-title-wrap">
+          <span class="modal-emoji" aria-hidden="true">📘</span>
+          <h2 class="modal-title" id="modal-guide-title">Panduan Pembelajaran Guru &amp; Orang Tua</h2>
+        </div>
+        <button type="button" id="btn-close-modal" class="btn-close-modal-3d" aria-label="Tutup Panduan">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="guide-section-block">
+          <h3 class="guide-section-title">🎯 Capaian Pembelajaran (Kurikulum Merdeka PAUD)</h3>
+          <p>
+            Permainan <strong>Detektif Kebaikan</strong> melatih aspek <em>Nilai Agama &amp; Moral</em> serta <em>Sosial Emosional</em> anak usia 5–6 tahun.
+          </p>
+          <ul class="guide-list">
+            <li><strong>Kepekaan Sosial:</strong> Mengenali ekspresi teman yang sedang mengalami kesulitan.</li>
+            <li><strong>Empati:</strong> Menumbuhkan keinginan tulus membantu teman bermain.</li>
+            <li><strong>Kata Ajaib Santun:</strong> Membiasakan ucapan <em>"Tolong"</em> dan <em>"Terima Kasih"</em>.</li>
+          </ul>
+        </div>
+
+        <div class="guide-section-block">
+          <h3 class="guide-section-title">👩‍🏫 Langkah Pendampingan</h3>
+          <ol class="guide-list">
+            <li><strong>Opening:</strong> Dengarkan sapaan Dodo dan ajak anak bersemangat memulai misi.</li>
+            <li><strong>Taman Bermain:</strong> Ajak anak mengamati 5 aktivitas teman secara berurutan dari ayunan di kiri hingga perosotan di kanan.</li>
+            <li><strong>Tantangan Moral:</strong> Diskusikan mengapa meminta tolong dengan sopan dan berterima kasih membuat semua teman senang.</li>
+            <li><strong>Praktik Bersama:</strong> Tekan tombol audio <em>TOLONG</em> dan <em>TERIMA KASIH</em> lalu ucapkan lantang bersama anak.</li>
+          </ol>
+        </div>
+
+        <div class="guide-section-block guide-highlight-yellow">
+          <h3 class="guide-section-title">⭐ Prinsip Positive Reinforcement</h3>
+          <p>
+            Tidak ada penalti nilai atau layar <em>Game Over</em>. Setiap pilihan yang belum tepat ditanggapi lembut oleh Dodo agar anak percaya diri mencoba lagi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/visuals.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
